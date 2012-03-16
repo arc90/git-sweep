@@ -9,3 +9,6 @@ develop-eggs
 tmp
 build
 dist
+.jig
+eggs
+parts

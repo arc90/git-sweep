@@ -41,6 +41,25 @@ Try it for yourself (safely)
 
     Instructions for having your team sync their branches
 
+Development
+-----------
+
+git-sweep uses `git-flow`_ for development and release cylces. If you want to
+hack on this with us, fork the project and put a pull request into the
+``develop`` branch when you get done.
+
+To run the tests, bootstrap Buildout and run this command:
+
+::
+
+    $ git clone http://github.com/arc90/git-sweep.git
+    $ cd git-sweep
+    $ python2.7 bootstrap.py
+    ...
+    $ ./bin/buildout
+    ...
+    $ ./bin/test
+
 Requirements:
 -------------
 
