@@ -60,11 +60,18 @@ To run the tests, bootstrap Buildout and run this command:
     ...
     $ ./bin/test
 
-Requirements:
--------------
+Requirements
+------------
 
 * Git >= 1.7
 * Python >= 2.6
 
 .. _GitHub Flow: http://scottchacon.com/2011/08/31/github-flow.html
 .. _git-flow: http://nvie.com/posts/a-successful-git-branching-model/
+
+License
+-------
+
+Friendly neighborhood MIT license:
+
+.. include:: LICENSE.txt

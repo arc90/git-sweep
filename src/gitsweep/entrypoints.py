@@ -6,7 +6,7 @@ def main():
 
     from gitsweep.cli import CommandLine
 
-    CommandLine(sys.argv)
+    CommandLine(sys.argv).run()
 
 
 def test():
