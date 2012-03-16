@@ -22,8 +22,8 @@ now?
 The answer
 ----------
 
-Using ``git-sweep`` you can *safely remove remote branches that have been
-merged into master*.
+Using ``git-sweep`` you can **safely remove remote branches that have been
+merged into master**.
 
 To install it run:
 
@@ -35,6 +35,14 @@ Try it for yourself (safely)
 ----------------------------
 
 To see a list of branches that git-sweep detects are merged into your master branch:
+
+You need to have your Git repository as your current working directory.
+
+::
+
+    $ cd myrepo
+
+The ``preview`` command doesn't make any changes to your repo.
 
 ::
 
@@ -51,7 +59,7 @@ To see a list of branches that git-sweep detects are merged into your master bra
     To delete them, run again with `git-sweep cleanup`
 
 If you are happy with the list, you can run the command that deletes these
-branches from the remote:
+branches from the remote, ``cleanup``:
 
 ::
 
@@ -77,7 +85,7 @@ branches from the remote:
     Tell everyone to run `git fetch --prune` to sync with this remote.
     (you don't have to, your's is synced)
 
-.. note:: This can take a little time, it's talking over the tubes to the remote.
+*Note: this can take a little time, it's talking over the tubes to the remote.*
 
 You can also give it a different name for your remote and master branches.
 
@@ -142,6 +150,4 @@ Requirements
 License
 -------
 
-Friendly neighborhood MIT license:
-
-.. include:: LICENSE.txt
+Friendly neighborhood MIT license.
