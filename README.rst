@@ -25,21 +25,91 @@ The answer
 Using ``git-sweep`` you can *safely remove remote branches that have been
 merged into master*.
 
+To install it run:
+
+::
+
+    pip install git-sweep || easy_install git-sweep
+
 Try it for yourself (safely)
 ----------------------------
+
+To see a list of branches that git-sweep detects are merged into your master branch:
 
 ::
 
     $ git-sweep preview
+    Fetching from the remote
+    These branches have been merged into master:
+
+      branch1
+      branch2
+      branch3
+      branch4
+      branch5
+
+    To delete them, run again with `git-sweep cleanup`
+
+If you are happy with the list, you can run the command that deletes these
+branches from the remote:
 
 ::
 
     $ git-sweep cleanup
-    Are you sure you wish to delete 15 remote branches (y/n)?
+    Fetching from the remote
+    These branches have been merged into master:
+
+      branch1
+      branch2
+      branch3
+      branch4
+      branch5
+
+    Delete these branches? (y/n) y
+      deleting branch1 (done)
+      deleting branch2 (done)
+      deleting branch3 (done)
+      deleting branch4 (done)
+      deleting branch5 (done)
+
+    All done!
+
+    Tell everyone to run `git fetch --prune` to sync with this remote.
+    (you don't have to, your's is synced)
+
+.. note:: This can take a little time, it's talking over the tubes to the remote.
+
+You can also give it a different name for your remote and master branches.
 
 ::
 
-    Instructions for having your team sync their branches
+    $ git-sweep preview --master=develop --origin=github
+    ...
+
+Tell it to skip the ``git fetch`` that it does by default.
+
+::
+
+    $ git-sweep preview --nofetch
+    These branches have been merged into master:
+
+      branch1
+
+    To delete them, run again with `git-sweep cleanup`
+
+Make it skip certain branches.
+
+::
+
+    $ git-sweep preview --skip=develop
+    Fetching from the remote
+    These branches have been merged into master:
+
+      important-upgrade
+      upgrade-libs
+      derp-removal
+
+    To delete them, run again with `git-sweep cleanup`
 
 Development
 -----------

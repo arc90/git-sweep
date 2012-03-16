@@ -31,6 +31,11 @@ class CommandLine(object):
         'dest': 'master',
         'default': 'master'}
 
+    _skip_kwargs = {
+        'help': 'Comma-separated list of branches to skip',
+        'dest': 'skips',
+        'default': ''}
+
     _no_fetch_kwargs = {
         'help': 'Do not fetch from the remote',
         'dest': 'fetch',
@@ -42,6 +47,7 @@ class CommandLine(object):
     _preview.add_argument('--origin', **_origin_kwargs)
     _preview.add_argument('--master', **_master_kwargs)
     _preview.add_argument('--nofetch', **_no_fetch_kwargs)
+    _preview.add_argument('--skip', **_skip_kwargs)
     _preview.set_defaults(action='preview')
 
     _cleanup = _sub_parsers.add_parser('cleanup',
@@ -49,6 +55,7 @@ class CommandLine(object):
     _cleanup.add_argument('--origin', **_origin_kwargs)
     _cleanup.add_argument('--master', **_master_kwargs)
     _cleanup.add_argument('--nofetch', **_no_fetch_kwargs)
+    _cleanup.add_argument('--skip', **_skip_kwargs)
     _cleanup.set_defaults(action='cleanup')
 
     def __init__(self, args):
@@ -77,6 +84,7 @@ class CommandLine(object):
 
         dry_run = True if args.action == 'preview' else False
         fetch = args.fetch
+        skips = [i.strip() for i in args.skips.split(',')]
 
         # Is this a Git repository?
         repo = Repo(getcwd())
@@ -95,7 +103,7 @@ class CommandLine(object):
         # Find branches that could be merged
         inspector = Inspector(repo, remote_name=remote_name,
             master_branch=master_branch)
-        ok_to_delete = inspector.merged_refs()
+        ok_to_delete = inspector.merged_refs(skip=skips)
 
         if ok_to_delete:
             sys.stdout.write(

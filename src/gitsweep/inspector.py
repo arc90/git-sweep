@@ -9,7 +9,7 @@ class Inspector(BaseOperation):
     Used to introspect a Git repository.
 
     """
-    def merged_refs(self):
+    def merged_refs(self, skip=[]):
         """
         Returns a list of remote refs that have been merged into the master
         branch.
@@ -20,7 +20,8 @@ class Inspector(BaseOperation):
         origin = self._origin
 
         master = self._master_ref(origin)
-        refs = self._filtered_remotes(origin)
+        refs = self._filtered_remotes(
+            origin, skip=['HEAD', self.master_branch] + skip)
         merged = []
 
         for ref in refs:

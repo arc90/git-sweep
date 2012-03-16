@@ -1,4 +1,5 @@
 from mock import patch
+from nose.plugins.attrib import attr
 
 from gitsweep.tests.testcases import CommandTestCase
 
@@ -46,7 +47,8 @@ class TestHelpMenu(CommandTestCase):
         """
         Will not fetch if told not to.
         """
-        (retcode, stdout, stderr) = self.gscommand('git-sweep preview --nofetch')
+        (retcode, stdout, stderr) = self.gscommand(
+            'git-sweep preview --nofetch')
 
         self.assertResults('''
             No remote branches are available for cleaning up
@@ -159,4 +161,30 @@ class TestHelpMenu(CommandTestCase):
 
             Delete these branches? (y/n) 
             OK, aborting.
+            ''', stdout)
+
+    @attr('focus')
+    def test_will_skip_certain_branches(self):
+        """
+        Can be forced to skip certain branches.
+        """
+        for i in range(1, 6):
+            self.command('git checkout -b branch{}'.format(i))
+            self.make_commit()
+            self.command('git checkout master')
+            self.make_commit()
+            self.command('git merge branch{}'.format(i))
+
+        (retcode, stdout, stderr) = self.gscommand(
+            'git-sweep preview --skip=branch1,branch2')
+
+        self.assertResults('''
+            Fetching from the remote
+            These branches have been merged into master:
+
+              branch3
+              branch4
+              branch5
+
+            To delete them, run again with `git-sweep cleanup`
             ''', stdout)
