@@ -1,10 +1,9 @@
 News
 ====
 
-0.1
----
+0.1.0
+-----
 
-*Release date: TBD*
+*Release date: 0.1.0*
 
 * Initial release
-
