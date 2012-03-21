@@ -12,11 +12,11 @@ class TestDeleter(GitSweepTestCase, InspectorTestCase, DeleterTestCase):
         super(TestDeleter, self).setUp()
 
         for i in range(1, 6):
-            self.command('git checkout -b branch{}'.format(i))
+            self.command('git checkout -b branch{0}'.format(i))
             self.make_commit()
             self.command('git checkout master')
             self.make_commit()
-            self.command('git merge branch{}'.format(i))
+            self.command('git merge branch{0}'.format(i))
 
     def test_will_delete_merged_from_clone(self):
         """

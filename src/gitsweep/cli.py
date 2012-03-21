@@ -107,14 +107,14 @@ class CommandLine(object):
 
         if ok_to_delete:
             sys.stdout.write(
-                'These branches have been merged into {}:\n\n'.format(
+                'These branches have been merged into {0}:\n\n'.format(
                     master_branch))
         else:
             sys.stdout.write('No remote branches are available for '
                 'cleaning up\n')
 
         for ref in ok_to_delete:
-            sys.stdout.write('  {}\n'.format(ref.remote_head))
+            sys.stdout.write('  {0}\n'.format(ref.remote_head))
 
         if not dry_run:
             deleter = Deleter(repo, remote_name=remote_name,
@@ -125,16 +125,16 @@ class CommandLine(object):
             if answer.lower().startswith('y'):
                 sys.stdout.write('\n')
                 for ref in ok_to_delete:
-                    sys.stdout.write('  deleting {}'.format(ref.remote_head))
+                    sys.stdout.write('  deleting {0}'.format(ref.remote_head))
                     deleter.remove_remote_refs([ref])
                     sys.stdout.write(' (done)\n')
 
                 sys.stdout.write('\nAll done!\n')
                 sys.stdout.write('\nTell everyone to run `git fetch --prune` '
                     'to sync with this remote.\n')
-                sys.stdout.write('(you don\'t have to, your\'s is synced)')
+                sys.stdout.write('(you don\'t have to, your\'s is synced)\n')
             else:
-                sys.stdout.write('\nOK, aborting.')
+                sys.stdout.write('\nOK, aborting.\n')
         elif ok_to_delete:
             sys.stdout.write(
-                '\nTo delete them, run again with `git-sweep cleanup`')
+                '\nTo delete them, run again with `git-sweep cleanup`\n')

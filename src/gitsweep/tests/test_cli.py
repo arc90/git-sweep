@@ -59,11 +59,11 @@ class TestHelpMenu(CommandTestCase):
         Will preview the proposed deletes.
         """
         for i in range(1, 6):
-            self.command('git checkout -b branch{}'.format(i))
+            self.command('git checkout -b branch{0}'.format(i))
             self.make_commit()
             self.command('git checkout master')
             self.make_commit()
-            self.command('git merge branch{}'.format(i))
+            self.command('git merge branch{0}'.format(i))
 
         (retcode, stdout, stderr) = self.gscommand('git-sweep preview')
 
@@ -85,7 +85,7 @@ class TestHelpMenu(CommandTestCase):
         Will preview the proposed deletes.
         """
         for i in range(1, 6):
-            self.command('git checkout -b branch{}'.format(i))
+            self.command('git checkout -b branch{0}'.format(i))
             self.make_commit()
             self.command('git checkout master')
 
@@ -101,11 +101,11 @@ class TestHelpMenu(CommandTestCase):
         Will preview the proposed deletes.
         """
         for i in range(1, 6):
-            self.command('git checkout -b branch{}'.format(i))
+            self.command('git checkout -b branch{0}'.format(i))
             self.make_commit()
             self.command('git checkout master')
             self.make_commit()
-            self.command('git merge branch{}'.format(i))
+            self.command('git merge branch{0}'.format(i))
 
         with patch('gitsweep.cli.raw_input', create=True) as ri:
             ri.return_value = 'y'
@@ -139,11 +139,11 @@ class TestHelpMenu(CommandTestCase):
         Will preview the proposed deletes.
         """
         for i in range(1, 6):
-            self.command('git checkout -b branch{}'.format(i))
+            self.command('git checkout -b branch{0}'.format(i))
             self.make_commit()
             self.command('git checkout master')
             self.make_commit()
-            self.command('git merge branch{}'.format(i))
+            self.command('git merge branch{0}'.format(i))
 
         with patch('gitsweep.cli.raw_input', create=True) as ri:
             ri.return_value = 'n'
@@ -169,11 +169,11 @@ class TestHelpMenu(CommandTestCase):
         Can be forced to skip certain branches.
         """
         for i in range(1, 6):
-            self.command('git checkout -b branch{}'.format(i))
+            self.command('git checkout -b branch{0}'.format(i))
             self.make_commit()
             self.command('git checkout master')
             self.make_commit()
-            self.command('git merge branch{}'.format(i))
+            self.command('git merge branch{0}'.format(i))
 
         (retcode, stdout, stderr) = self.gscommand(
             'git-sweep preview --skip=branch1,branch2')

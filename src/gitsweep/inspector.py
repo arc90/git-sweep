@@ -25,16 +25,17 @@ class Inspector(BaseOperation):
         merged = []
 
         for ref in refs:
-            since_until = '{origin}/{master}..{origin}/{branch}'.format(
-                origin=origin.name, master=master.remote_head,
-                branch=ref.remote_head)
+            upstream = '{origin}/{master}'.format(
+                origin=origin.name, master=master.remote_head)
+            head = '{origin}/{branch}'.format(
+                origin=origin.name, branch=ref.remote_head)
             cmd = Git(self.repo.working_dir)
             # Drop to the git binary to do this, it's just easier to work with
             # at this level.
-            (retcode, _, _) = cmd.execute(
-                ['git', 'log', '--exit-code', since_until],
+            (retcode, stdout, stderr) = cmd.execute(
+                ['git', 'cherry', upstream, head],
                 with_extended_output=True, with_exceptions=False)
-            if retcode == 0:
+            if retcode == 0 and not stdout:
                 # This means there are no commits in the branch that are not
                 # also in the master branch. This is ready to be deleted.
                 merged.append(ref)

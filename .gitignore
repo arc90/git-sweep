@@ -12,3 +12,4 @@ dist
 .jig
 eggs
 parts
+.tox

@@ -1,16 +1,19 @@
-from setuptools import setup, find_packages
+import sys
 import os
+from setuptools import setup, find_packages
 
 here = os.path.abspath(os.path.dirname(__file__))
 README = open(os.path.join(here, 'README.rst')).read()
 NEWS = open(os.path.join(here, 'NEWS.txt')).read()
-
 
 version = '0.1.0'
 
 install_requires = [
     'GitPython>=0.3.2RC1']
 
+# Add argparse if less than Python 2.7
+if sys.version_info[0] <= 2 and sys.version_info[1] < 7:
+    install_requires.append('argparse>=1.2.1')
 
 setup(name='git-sweep',
     version=version,

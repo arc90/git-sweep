@@ -145,7 +145,7 @@ class GitSweepTestCase(TestCase):
             fh.write(uuid().hex)
 
         self.repo.index.add([basename(filename)])
-        self.repo.index.commit('Adding {}'.format(basename(filename)))
+        self.repo.index.commit('Adding {0}'.format(basename(filename)))
 
 
 class InspectorTestCase(TestCase):

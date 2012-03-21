@@ -18,7 +18,7 @@ class TestInspector(GitSweepTestCase, InspectorTestCase):
         Will filter references and not return HEAD and master.
         """
         for i in range(1, 4):
-            self.command('git checkout -b branch{}'.format(i))
+            self.command('git checkout -b branch{0}'.format(i))
             self.command('git checkout master')
 
         refs = self.inspector._filtered_remotes(
@@ -114,11 +114,11 @@ class TestInspector(GitSweepTestCase, InspectorTestCase):
             |/
         """
         for i in range(1, 6):
-            self.command('git checkout -b branch{}'.format(i))
+            self.command('git checkout -b branch{0}'.format(i))
             self.make_commit()
             self.command('git checkout master')
             self.make_commit()
-            self.command('git merge branch{}'.format(i))
+            self.command('git merge branch{0}'.format(i))
 
         self.assertEqual(
             ['branch1', 'branch2', 'branch3', 'branch4', 'branch5'],

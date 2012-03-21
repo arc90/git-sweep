@@ -50,7 +50,7 @@ class BaseOperation(object):
                 return ref
 
         raise MissingMasterBranch(
-            'Could not find ref for {}'.format(self.master_branch))
+            'Could not find ref for {0}'.format(self.master_branch))
 
     @property
     def _origin(self):
@@ -64,7 +64,7 @@ class BaseOperation(object):
                 origin = remote
 
         if not origin:
-            raise MissingRemote('Could not find the remote named {}'.format(
+            raise MissingRemote('Could not find the remote named {0}'.format(
                 self.remote_name))
 
         return origin
