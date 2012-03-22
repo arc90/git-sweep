@@ -132,7 +132,7 @@ class CommandLine(object):
                 sys.stdout.write('\nAll done!\n')
                 sys.stdout.write('\nTell everyone to run `git fetch --prune` '
                     'to sync with this remote.\n')
-                sys.stdout.write('(you don\'t have to, your\'s is synced)')
+                sys.stdout.write('(you don\'t have to, yours is synced)\n')
             else:
                 sys.stdout.write('\nOK, aborting.')
         elif ok_to_delete:
