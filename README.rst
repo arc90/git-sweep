@@ -83,7 +83,7 @@ branches from the remote, ``cleanup``:
     All done!
 
     Tell everyone to run `git fetch --prune` to sync with this remote.
-    (you don't have to, your's is synced)
+    (you don't have to, yours is synced)
 
 *Note: this can take a little time, it's talking over the tubes to the remote.*
 
