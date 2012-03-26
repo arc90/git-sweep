@@ -103,7 +103,7 @@ Tell it to skip the ``git fetch`` that it does by default.
 
       branch1
 
-    To delete them, run again with `git-sweep cleanup`
+    To delete them, run again with `git-sweep cleanup --nofetch`
 
 Make it skip certain branches.
 
@@ -117,7 +117,36 @@ Make it skip certain branches.
       upgrade-libs
       derp-removal
 
-    To delete them, run again with `git-sweep cleanup`
+    To delete them, run again with `git-sweep cleanup --skip=develop`
+
+Once git-sweep finds the branches, you'll be asked to confirm that you wish to
+delete them.
+
+::
+
+    Delete these branches? (y/n)
+
+You can use the ``--force`` option to bypass this and start deleting
+immediately.
+
+::
+
+    $ git-sweep cleanup --skip=develop --force
+    Fetching from the remote
+    These branches have been merged into master:
+
+      important-upgrade
+      upgrade-libs
+      derp-removal
+
+      deleting important-upgrade (done)
+      deleting upgrade-libs (done)
+      deleting derp-removal (done)
+
+    All done!
+
+    Tell everyone to run `git fetch --prune` to sync with this remote.
+    (you don't have to, yours is synced)
 
 Development
 -----------
@@ -138,16 +167,23 @@ To run the tests, bootstrap Buildout and run this command:
     ...
     $ ./bin/test
 
+We also use Tox_. It will run the tests for Python 2.6 and 2.7.
+
+::
+
+    $ ./bin/tox
+
 Requirements
 ------------
 
 * Git >= 1.7
 * Python >= 2.6
 
-.. _GitHub Flow: http://scottchacon.com/2011/08/31/github-flow.html
-.. _git-flow: http://nvie.com/posts/a-successful-git-branching-model/
-
 License
 -------
 
 Friendly neighborhood MIT license.
+
+.. _GitHub Flow: http://scottchacon.com/2011/08/31/github-flow.html
+.. _git-flow: http://nvie.com/posts/a-successful-git-branching-model/
+.. _Tox: http://pypi.python.org/pypi/tox

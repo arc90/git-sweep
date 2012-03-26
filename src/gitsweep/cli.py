@@ -1,6 +1,7 @@
 import sys
 from os import getcwd
 from argparse import ArgumentParser
+from textwrap import dedent
 
 from git import Repo, InvalidGitRepositoryError
 
@@ -15,8 +16,9 @@ class CommandLine(object):
 
     """
     parser = ArgumentParser(
-        description='Clean up your Git repository remote branches',
-        prog='git-sweep')
+        description='Clean up your Git remote branches.',
+        usage='git-sweep <action> [-h]',
+        )
 
     _sub_parsers = parser.add_subparsers(title='action',
         description='Preview changes or perform clean up')
@@ -42,16 +44,30 @@ class CommandLine(object):
         'action': 'store_false',
         'default': True}
 
+    _preview_usage = dedent('''
+        git-sweep preview [-h] [--nofetch] [--skip SKIPS]
+                              [--master MASTER] [--origin ORIGIN]
+        '''.strip())
+
     _preview = _sub_parsers.add_parser('preview',
-        help='Preview the branches that will be deleted')
+        help='Preview the branches that will be deleted',
+        usage=_preview_usage)
     _preview.add_argument('--origin', **_origin_kwargs)
     _preview.add_argument('--master', **_master_kwargs)
     _preview.add_argument('--nofetch', **_no_fetch_kwargs)
     _preview.add_argument('--skip', **_skip_kwargs)
     _preview.set_defaults(action='preview')
 
+    _cleanup_usage = dedent('''
+        git-sweep cleanup [-h] [--nofetch] [--skip SKIPS] [--force]
+                              [--master MASTER] [--origin ORIGIN]
+        '''.strip())
+
     _cleanup = _sub_parsers.add_parser('cleanup',
-        help='Delete merged branches from the remote')
+        help='Delete merged branches from the remote',
+        usage=_cleanup_usage)
+    _cleanup.add_argument('--force', action='store_true', default=False,
+        dest='force', help='Do not ask, cleanup immediately')
     _cleanup.add_argument('--origin', **_origin_kwargs)
     _cleanup.add_argument('--master', **_master_kwargs)
     _cleanup.add_argument('--nofetch', **_no_fetch_kwargs)
@@ -66,6 +82,10 @@ class CommandLine(object):
         Runs git-sweep.
         """
         try:
+            if not self.args:
+                self.parser.print_help()
+                sys.exit(1)
+
             self._sweep()
 
             sys.exit(0)
@@ -120,9 +140,10 @@ class CommandLine(object):
             deleter = Deleter(repo, remote_name=remote_name,
                 master_branch=master_branch)
 
-            sys.stdout.write('\nDelete these branches? (y/n) ')
-            answer = raw_input()
-            if answer.lower().startswith('y'):
+            if not args.force:
+                sys.stdout.write('\nDelete these branches? (y/n) ')
+                answer = raw_input()
+            if args.force or answer.lower().startswith('y'):
                 sys.stdout.write('\n')
                 for ref in ok_to_delete:
                     sys.stdout.write('  deleting {0}'.format(ref.remote_head))
@@ -136,5 +157,10 @@ class CommandLine(object):
             else:
                 sys.stdout.write('\nOK, aborting.\n')
         elif ok_to_delete:
+            # Replace the first argument with cleanup
+            sysv_copy = self.args[:]
+            sysv_copy[0] = 'cleanup'
+            command = 'git-sweep {0}'.format(' '.join(sysv_copy))
+
             sys.stdout.write(
-                '\nTo delete them, run again with `git-sweep cleanup`\n')
+                '\nTo delete them, run again with `{0}`\n'.format(command))
