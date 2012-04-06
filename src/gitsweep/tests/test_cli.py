@@ -78,6 +78,27 @@ class TestHelpMenu(CommandTestCase):
 
             To delete them, run again with `git-sweep cleanup`
             ''', stdout)
+    
+    def test_will_preview_csv(self):
+        """
+        Will preview the proposed deletes in CSV format
+        """
+        for i in range(1, 6):
+            self.command('git checkout -b branch{0}'.format(i))
+            self.make_commit()
+            self.command('git checkout master')
+            self.make_commit()
+            self.command('git merge branch{0}'.format(i))
+        
+        (retcode, stdout, stderr) = self.gscommand('git-sweep preview --csv')
+        
+        valid_csv = True
+        data = stdout.split('\r\n')
+        for row in data:
+            if row.count(',') != 2 and row.strip() != '':
+                valid_csv = False
+        
+        self.assertTrue(valid_csv)
 
     def test_will_preserve_arguments(self):
         """
