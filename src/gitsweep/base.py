@@ -22,10 +22,11 @@ class BaseOperation(object):
     Base class for all Git-related operations.
 
     """
-    def __init__(self, repo, remote_name='origin', master_branch='master'):
+    def __init__(self, repo, remote_name='origin', master_branch='master', verbose=False):
         self.repo = repo
         self.remote_name = remote_name
         self.master_branch = master_branch
+        self.verbose = verbose
 
     def _filtered_remotes(self, origin, skip=[]):
         """

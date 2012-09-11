@@ -79,6 +79,43 @@ class TestHelpMenu(CommandTestCase):
             To delete them, run again with `git-sweep cleanup`
             ''', stdout)
 
+    def test_verbose_preview(self):
+        """
+        Will show verbose output when previewing the proposed deletes.
+        """
+        for i in range(1, 6):
+            self.command('git checkout -b branch{0}'.format(i))
+            self.make_commit()
+            self.command('git checkout master')
+            self.make_commit()
+            self.command('git merge branch{0}'.format(i))
+
+        (retcode, stdout, stderr) = self.gscommand('git-sweep preview --verbose')
+
+        self.assertResults('''
+            Fetching from the remote
+            Found 5 remote refs
+            Checking origin/branch1 (1/5)...
+            ...merged (ok to delete)
+            Checking origin/branch2 (2/5)...
+            ...merged (ok to delete)
+            Checking origin/branch3 (3/5)...
+            ...merged (ok to delete)
+            Checking origin/branch4 (4/5)...
+            ...merged (ok to delete)
+            Checking origin/branch5 (5/5)...
+            ...merged (ok to delete)
+            These branches have been merged into master:
+
+              branch1
+              branch2
+              branch3
+              branch4
+              branch5
+
+            To delete them, run again with `git-sweep cleanup --verbose`
+            ''', stdout)
+
     def test_will_preserve_arguments(self):
         """
         The recommended cleanup command contains the same arguments given.

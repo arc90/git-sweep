@@ -44,8 +44,14 @@ class CommandLine(object):
         'action': 'store_false',
         'default': True}
 
+    _verbose_kwargs = {
+        'help': 'Verbose output',
+        'dest': 'verbose',
+        'action': 'store_true',
+        'default': False}
+
     _preview_usage = dedent('''
-        git-sweep preview [-h] [--nofetch] [--skip SKIPS]
+        git-sweep preview [-h] [--verbose] [--nofetch] [--skip SKIPS]
                               [--master MASTER] [--origin ORIGIN]
         '''.strip())
 
@@ -56,10 +62,11 @@ class CommandLine(object):
     _preview.add_argument('--master', **_master_kwargs)
     _preview.add_argument('--nofetch', **_no_fetch_kwargs)
     _preview.add_argument('--skip', **_skip_kwargs)
+    _preview.add_argument('--verbose', **_verbose_kwargs)
     _preview.set_defaults(action='preview')
 
     _cleanup_usage = dedent('''
-        git-sweep cleanup [-h] [--nofetch] [--skip SKIPS] [--force]
+        git-sweep cleanup [-h] [--verbose] [--nofetch] [--skip SKIPS] [--force]
                               [--master MASTER] [--origin ORIGIN]
         '''.strip())
 
@@ -72,6 +79,7 @@ class CommandLine(object):
     _cleanup.add_argument('--master', **_master_kwargs)
     _cleanup.add_argument('--nofetch', **_no_fetch_kwargs)
     _cleanup.add_argument('--skip', **_skip_kwargs)
+    _cleanup.add_argument('--verbose', **_verbose_kwargs)
     _cleanup.set_defaults(action='cleanup')
 
     def __init__(self, args):
@@ -122,7 +130,7 @@ class CommandLine(object):
 
         # Find branches that could be merged
         inspector = Inspector(repo, remote_name=remote_name,
-            master_branch=master_branch)
+            master_branch=master_branch, verbose=args.verbose)
         ok_to_delete = inspector.merged_refs(skip=skips)
 
         if ok_to_delete:
