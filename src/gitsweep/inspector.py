@@ -35,7 +35,7 @@ class Inspector(BaseOperation):
             head = '{origin}/{branch}'.format(
                 origin=origin.name, branch=ref.remote_head)
             if self.verbose:
-                sys.stdout.write("Processing %s (%d/%d)...\n" % (head, idx + 1, num_refs))
+                sys.stdout.write("Checking %s (%d/%d)...\n" % (head, idx + 1, num_refs))
             cmd = Git(self.repo.working_dir)
             # Drop to the git binary to do this, it's just easier to work with
             # at this level.
@@ -43,8 +43,13 @@ class Inspector(BaseOperation):
                 ['git', 'cherry', upstream, head],
                 with_extended_output=True, with_exceptions=False)
             if retcode == 0 and not stdout:
+                if self.verbose:
+                    sys.stdout.write("...merged (ok to delete)\n")
                 # This means there are no commits in the branch that are not
                 # also in the master branch. This is ready to be deleted.
                 merged.append(ref)
+            else:
+                if self.verbose:
+                    sys.stdout.write("...not merged\n")
 
         return merged
