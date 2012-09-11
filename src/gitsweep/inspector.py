@@ -1,3 +1,4 @@
+import sys
 from git import Git
 
 from .base import BaseOperation
@@ -24,11 +25,17 @@ class Inspector(BaseOperation):
             origin, skip=['HEAD', self.master_branch] + skip)
         merged = []
 
-        for ref in refs:
+        num_refs = len(refs)
+        if self.verbose:
+            sys.stdout.write("Found %d remote refs\n" % num_refs)
+
+        for idx, ref in enumerate(refs):
             upstream = '{origin}/{master}'.format(
                 origin=origin.name, master=master.remote_head)
             head = '{origin}/{branch}'.format(
                 origin=origin.name, branch=ref.remote_head)
+            if self.verbose:
+                sys.stdout.write("Processing %s (%d/%d)...\n" % (head, idx + 1, num_refs))
             cmd = Git(self.repo.working_dir)
             # Drop to the git binary to do this, it's just easier to work with
             # at this level.
