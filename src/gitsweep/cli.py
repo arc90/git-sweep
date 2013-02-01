@@ -90,9 +90,9 @@ class CommandLine(object):
 
             sys.exit(0)
         except InvalidGitRepositoryError:
-            sys.stdout.write('This is not a Git repository\n')
+            sys.stderr.write('This is not a Git repository\n')
         except Exception as e:
-            sys.stdout.write(str(e) + '\n')
+            sys.stderr.write(str(e) + '\n')
 
         sys.exit(1)
 
