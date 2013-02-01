@@ -1,9 +1,19 @@
 News
 ====
 
+0.1.1
+
+*Release date: March 28, 2012*
+
+* Fix issue #1 which makes the git-sweep help menus more useful
+* Fix a minor grammar issue in the help
+* Fix issue #2 which dropped extra options when telling you to use
+  cleanup
+* Added a --force option to skip confirmation prompt
+
 0.1.0
 -----
 
-*Release date: 0.1.0*
+*Release date: n/a*
 
 * Initial release
