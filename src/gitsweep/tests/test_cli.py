@@ -252,3 +252,14 @@ class TestHelpMenu(CommandTestCase):
             Tell everyone to run `git fetch --prune` to sync with this remote.
             (you don't have to, yours is synced)
             ''', stdout)
+
+    def test_cleanup_will_not_prompt_if_none_found(self):
+        """
+        Will not prompt clean up if no branches found.
+        """
+        (retcode, stdout, stderr) = self.gscommand('git-sweep cleanup')
+
+        self.assertResults('''
+            Fetching from the remote
+            No remote branches are available for cleaning up
+            ''', stdout)

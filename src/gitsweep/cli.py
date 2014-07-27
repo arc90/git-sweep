@@ -136,7 +136,7 @@ class CommandLine(object):
         for ref in ok_to_delete:
             sys.stdout.write('  {0}\n'.format(ref.remote_head))
 
-        if not dry_run:
+        if not dry_run and ok_to_delete:
             deleter = Deleter(repo, remote_name=remote_name,
                 master_branch=master_branch)
 
