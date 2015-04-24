@@ -16,7 +16,7 @@ class TestHelpMenu(CommandTestCase):
         (retcode, stdout, stderr) = self.gscommand('git-sweep -h')
 
         self.assertResults('''
-            usage: git-sweep <action> [-h]
+            usage: git-sweep <action> [-h] --origin [remote name]  --master [branch name]
 
             Clean up your Git remote branches.
 
