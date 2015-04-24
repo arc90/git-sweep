@@ -22,6 +22,8 @@ class TestHelpMenu(CommandTestCase):
 
             optional arguments:
               -h, --help         show this help message and exit
+              --origin [remote name]  select a specific remote (default is 'origin')
+              --master [branch name]  select a specific branch to use as master (default is 'master')
 
             action:
               Preview changes or perform clean up
