@@ -17,7 +17,7 @@ class CommandLine(object):
     """
     parser = ArgumentParser(
         description='Clean up your Git remote branches.',
-        usage='git-sweep <action> [-h]',
+        usage='git-sweep <action> [-h] --origin [remote name] --master [branch name]',
         )
 
     _sub_parsers = parser.add_subparsers(title='action',
