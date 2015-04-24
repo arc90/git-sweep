@@ -46,7 +46,7 @@ The ``preview`` command doesn't make any changes to your repo.
 
 ::
 
-    $ git-sweep preview
+    $ git sweep preview
     Fetching from the remote
     These branches have been merged into master:
 
@@ -56,14 +56,14 @@ The ``preview`` command doesn't make any changes to your repo.
       branch4
       branch5
 
-    To delete them, run again with `git-sweep cleanup`
+    To delete them, run again with `git sweep cleanup`
 
 If you are happy with the list, you can run the command that deletes these
 branches from the remote, ``cleanup``:
 
 ::
 
-    $ git-sweep cleanup
+    $ git sweep cleanup
     Fetching from the remote
     These branches have been merged into master:
 
@@ -91,25 +91,25 @@ You can also give it a different name for your remote and master branches.
 
 ::
 
-    $ git-sweep preview --master=develop --origin=github
+    $ git sweep preview --master=develop --origin=github
     ...
 
 Tell it to skip the ``git fetch`` that it does by default.
 
 ::
 
-    $ git-sweep preview --nofetch
+    $ git sweep preview --nofetch
     These branches have been merged into master:
 
       branch1
 
-    To delete them, run again with `git-sweep cleanup --nofetch`
+    To delete them, run again with `git sweep cleanup --nofetch`
 
 Make it skip certain branches.
 
 ::
 
-    $ git-sweep preview --skip=develop
+    $ git sweep preview --skip=develop
     Fetching from the remote
     These branches have been merged into master:
 
@@ -117,7 +117,7 @@ Make it skip certain branches.
       upgrade-libs
       derp-removal
 
-    To delete them, run again with `git-sweep cleanup --skip=develop`
+    To delete them, run again with `git sweep cleanup --skip=develop`
 
 Once git-sweep finds the branches, you'll be asked to confirm that you wish to
 delete them.
@@ -131,7 +131,7 @@ immediately.
 
 ::
 
-    $ git-sweep cleanup --skip=develop --force
+    $ git sweep cleanup --skip=develop --force
     Fetching from the remote
     These branches have been merged into master:
 
