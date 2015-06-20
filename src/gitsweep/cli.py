@@ -140,22 +140,23 @@ class CommandLine(object):
             deleter = Deleter(repo, remote_name=remote_name,
                 master_branch=master_branch)
 
-            if not args.force:
-                sys.stdout.write('\nDelete these branches? (y/n) ')
-                answer = raw_input()
-            if args.force or answer.lower().startswith('y'):
-                sys.stdout.write('\n')
-                for ref in ok_to_delete:
-                    sys.stdout.write('  deleting {0}'.format(ref.remote_head))
-                    deleter.remove_remote_refs([ref])
-                    sys.stdout.write(' (done)\n')
+            if ok_to_delete:
+                if not args.force:
+                    sys.stdout.write('\nDelete these branches? (y/n) ')
+                    answer = raw_input()
+                if args.force or answer.lower().startswith('y'):
+                    sys.stdout.write('\n')
+                    for ref in ok_to_delete:
+                        sys.stdout.write('  deleting {0}'.format(ref.remote_head))
+                        deleter.remove_remote_refs([ref])
+                        sys.stdout.write(' (done)\n')
 
-                sys.stdout.write('\nAll done!\n')
-                sys.stdout.write('\nTell everyone to run `git fetch --prune` '
-                    'to sync with this remote.\n')
-                sys.stdout.write('(you don\'t have to, yours is synced)\n')
-            else:
-                sys.stdout.write('\nOK, aborting.\n')
+                    sys.stdout.write('\nAll done!\n')
+                    sys.stdout.write('\nTell everyone to run `git fetch --prune` '
+                        'to sync with this remote.\n')
+                    sys.stdout.write('(you don\'t have to, yours is synced)\n')
+                else:
+                    sys.stdout.write('\nOK, aborting.\n')
         elif ok_to_delete:
             # Replace the first argument with cleanup
             sysv_copy = self.args[:]
