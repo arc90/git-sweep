@@ -1,12 +1,14 @@
 import sys
 from os import chdir, getcwd
 from os.path import join, basename
+import os
 from tempfile import mkdtemp
 from unittest import TestCase
 from uuid import uuid4 as uuid
 from shutil import rmtree
 from shlex import split
-from contextlib import contextmanager, nested
+from contextlib import contextmanager
+import contextlib
 from textwrap import dedent
 
 from mock import patch
@@ -60,7 +62,7 @@ class GitSweepTestCase(TestCase):
         This will create the root commit in the test repository automaticall.
         """
         super(GitSweepTestCase, self).setUp()
-
+        os.environ['GIT_AUTHOR_NAME'] = 'test'
         repodir = mkdtemp()
 
         self.repodir = repodir
@@ -248,16 +250,26 @@ class CommandTestCase(GitSweepTestCase, InspectorTestCase, DeleterTestCase):
         patches = (
             patch.object(sys, 'stdout'),
             patch.object(sys, 'stderr'))
+        try:
+            with contextlib.ExitStack() as stack:
+                [stack.enter_context(p) for p in patches]
+                stdout = sys.stdout
+                stderr = sys.stderr
+                try:
+                    self.cli.run()
+                except SystemExit as se:
+                    se_code = se.code
 
-        with nested(*patches):
-            stdout = sys.stdout
-            stderr = sys.stderr
-            try:
-                self.cli.run()
-            except SystemExit as se:
-                pass
+        except AttributeError:
+            with contextlib.nested(*patches):
+                stdout = sys.stdout
+                stderr = sys.stderr
+                try:
+                    self.cli.run()
+                except SystemExit as se:
+                    se_code = se.code
 
         stdout = ''.join([i[0][0] for i in stdout.write.call_args_list])
         stderr = ''.join([i[0][0] for i in stderr.write.call_args_list])
 
-        return (se.code, stdout, stderr)
+        return (se_code, stdout, stderr)
