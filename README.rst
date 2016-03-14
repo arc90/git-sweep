@@ -147,6 +147,19 @@ immediately.
 
     Tell everyone to run `git fetch --prune` to sync with this remote.
     (you don't have to, yours is synced)
+    
+    
+Deleting local branches
+-----------
+
+You can also clean up local branches by using simple hack:
+
+:: 
+
+    $ cd myrepo
+    $ git remote add local $(pwd)
+    $ git-sweep cleanup --origin=local
+    
 
 Development
 -----------
