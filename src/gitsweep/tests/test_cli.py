@@ -1,4 +1,7 @@
-from mock import patch
+try:
+    from unittest.mock import patch
+except ImportError:
+    from mock import patch
 
 from gitsweep.tests.testcases import CommandTestCase
 
@@ -135,7 +138,7 @@ class TestHelpMenu(CommandTestCase):
             self.make_commit()
             self.command('git merge branch{0}'.format(i))
 
-        with patch('gitsweep.cli.raw_input', create=True) as ri:
+        with patch('gitsweep.cli.input', create=True) as ri:
             ri.return_value = 'y'
             (retcode, stdout, stderr) = self.gscommand('git-sweep cleanup')
 
@@ -173,7 +176,7 @@ class TestHelpMenu(CommandTestCase):
             self.make_commit()
             self.command('git merge branch{0}'.format(i))
 
-        with patch('gitsweep.cli.raw_input', create=True) as ri:
+        with patch('gitsweep.cli.input', create=True) as ri:
             ri.return_value = 'n'
             (retcode, stdout, stderr) = self.gscommand('git-sweep cleanup')
 

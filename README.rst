@@ -180,7 +180,7 @@ To run the tests, bootstrap Buildout and run this command:
     ...
     $ ./bin/test
 
-We also use Tox_. It will run the tests for Python 2.6 and 2.7.
+We also use Tox_. It will run the tests for Python 2.7, 3.4, and 3.5.
 
 ::
 
@@ -190,7 +190,7 @@ Requirements
 ------------
 
 * Git >= 1.7
-* Python >= 2.6
+* Python 2.7, 3.4 3.5
 
 License
 -------
