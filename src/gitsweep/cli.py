@@ -2,6 +2,9 @@ import sys
 from os import getcwd
 from argparse import ArgumentParser
 from textwrap import dedent
+from datetime import date
+
+import csv
 
 from git import Repo, InvalidGitRepositoryError
 
@@ -37,6 +40,12 @@ class CommandLine(object):
         'help': 'Comma-separated list of branches to skip',
         'dest': 'skips',
         'default': ''}
+    
+    _output_csv = {
+        'help': 'Output branch list as CSV',
+        'dest': 'csv',
+        'action': 'store_true',
+        'default': False}
 
     _no_fetch_kwargs = {
         'help': 'Do not fetch from the remote',
@@ -45,7 +54,7 @@ class CommandLine(object):
         'default': True}
 
     _preview_usage = dedent('''
-        git-sweep preview [-h] [--nofetch] [--skip SKIPS]
+        git-sweep preview [-h] [--nofetch] [--csv] [--skip SKIPS]
                               [--master MASTER] [--origin ORIGIN]
         '''.strip())
 
@@ -56,6 +65,7 @@ class CommandLine(object):
     _preview.add_argument('--master', **_master_kwargs)
     _preview.add_argument('--nofetch', **_no_fetch_kwargs)
     _preview.add_argument('--skip', **_skip_kwargs)
+    _preview.add_argument('--csv', **_output_csv)
     _preview.set_defaults(action='preview')
 
     _cleanup_usage = dedent('''
@@ -105,6 +115,11 @@ class CommandLine(object):
         dry_run = True if args.action == 'preview' else False
         fetch = args.fetch
         skips = [i.strip() for i in args.skips.split(',')]
+        
+        try:
+            use_csv = args.csv
+        except AttributeError:
+            use_csv = False
 
         # Is this a Git repository?
         repo = Repo(getcwd())
@@ -115,7 +130,8 @@ class CommandLine(object):
         if fetch:
             for remote in repo.remotes:
                 if remote.name == remote_name:
-                    sys.stdout.write('Fetching from the remote\n')
+                    if use_csv == False:
+                        sys.stdout.write('Fetching from the remote\n')
                     remote.fetch()
 
         master_branch = args.master
@@ -125,16 +141,26 @@ class CommandLine(object):
             master_branch=master_branch)
         ok_to_delete = inspector.merged_refs(skip=skips)
 
-        if ok_to_delete:
-            sys.stdout.write(
-                'These branches have been merged into {0}:\n\n'.format(
-                    master_branch))
+        if use_csv == False:
+            if ok_to_delete:
+                sys.stdout.write(
+                    'These branches have been merged into {0}:\n\n'.format(
+                        master_branch))
+            else:
+                sys.stdout.write('No remote branches are available for '
+                    'cleaning up\n')
         else:
-            sys.stdout.write('No remote branches are available for '
-                'cleaning up\n')
-
+            writer = csv.writer(sys.stdout)
+            
         for ref in ok_to_delete:
-            sys.stdout.write('  {0}\n'.format(ref.remote_head))
+            if use_csv == True:
+                commit_data = repo.commit(ref)
+                writer.writerow([
+                    ref.remote_head,
+                    date.fromtimestamp(commit_data.committed_date).strftime('%Y-%m-%d'),
+                    commit_data.author.name])
+            else:
+                sys.stdout.write('  {0}\n'.format(ref.remote_head))
 
         if not dry_run:
             deleter = Deleter(repo, remote_name=remote_name,
@@ -157,10 +183,11 @@ class CommandLine(object):
             else:
                 sys.stdout.write('\nOK, aborting.\n')
         elif ok_to_delete:
-            # Replace the first argument with cleanup
-            sysv_copy = self.args[:]
-            sysv_copy[0] = 'cleanup'
-            command = 'git-sweep {0}'.format(' '.join(sysv_copy))
+            if use_csv == False:
+                # Replace the first argument with cleanup
+                sysv_copy = self.args[:]
+                sysv_copy[0] = 'cleanup'
+                command = 'git-sweep {0}'.format(' '.join(sysv_copy))
 
-            sys.stdout.write(
-                '\nTo delete them, run again with `{0}`\n'.format(command))
+                sys.stdout.write(
+                    '\nTo delete them, run again with `{0}`\n'.format(command))
