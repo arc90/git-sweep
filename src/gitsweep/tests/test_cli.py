@@ -126,7 +126,7 @@ class TestHelpMenu(CommandTestCase):
 
     def test_will_cleanup(self):
         """
-        Will preview the proposed deletes.
+        Will cleanup the proposed deletes.
         """
         for i in range(1, 6):
             self.command('git checkout -b branch{0}'.format(i))
@@ -164,7 +164,7 @@ class TestHelpMenu(CommandTestCase):
 
     def test_will_abort_cleanup(self):
         """
-        Will preview the proposed deletes.
+        Will abort cleanup on user request
         """
         for i in range(1, 6):
             self.command('git checkout -b branch{0}'.format(i))
@@ -252,3 +252,15 @@ class TestHelpMenu(CommandTestCase):
             Tell everyone to run `git fetch --prune` to sync with this remote.
             (you don't have to, yours is synced)
             ''', stdout)
+
+    def test_cleanup_no_branches_found(self):
+        """
+        Will not prompt user if no branches are found that can be cleaned up
+        """
+        (retcode, stdout, stderr) = self.gscommand('git-sweep cleanup --force')
+
+        self.assertResults('''
+            Fetching from the remote
+            No remote branches are available for cleaning up
+            ''', stdout)
+
