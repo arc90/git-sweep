@@ -9,7 +9,8 @@ NEWS = open(os.path.join(here, 'NEWS.txt')).read()
 version = '0.1.1'
 
 install_requires = [
-    'GitPython>=0.3.2RC1']
+    'GitPython>=0.3.2RC1',
+    'six==1.10.0']
 
 # Add argparse if less than Python 2.7
 if sys.version_info[0] <= 2 and sys.version_info[1] < 7:
