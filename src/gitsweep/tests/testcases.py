@@ -245,9 +245,7 @@ class CommandTestCase(GitSweepTestCase, InspectorTestCase, DeleterTestCase):
 
         self.cli.args = args[1:]
 
-        with (
-                patch.object(sys, 'stdout'),
-                patch.object(sys, 'stderr')):
+        with patch.object(sys, 'stdout'), patch.object(sys, 'stderr'):
             stdout = sys.stdout
             stderr = sys.stderr
             try:
