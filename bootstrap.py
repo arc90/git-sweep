@@ -20,8 +20,12 @@ use the -c option to specify an alternate configuration file.
 $Id: bootstrap.py 102545 2009-08-06 14:49:47Z chrisw $
 """
 
-import os, shutil, sys, tempfile, urllib2
+import os, shutil, sys, tempfile
 from optparse import OptionParser
+
+from six.moves import reload_module, urllib
+
+
 
 tmpeggs = tempfile.mkdtemp()
 
@@ -54,12 +58,18 @@ try:
 except ImportError:
     ez = {}
     if USE_DISTRIBUTE:
-        exec urllib2.urlopen('http://python-distribute.org/distribute_setup.py'
-                         ).read() in ez
+        exec(
+            urllib.request.urlopen('http://python-distribute.org/distribute_setup.py'
+                         ).read(),
+            ez,
+            ez)
         ez['use_setuptools'](to_dir=tmpeggs, download_delay=0, no_fake=True)
     else:
-        exec urllib2.urlopen('http://peak.telecommunity.com/dist/ez_setup.py'
-                             ).read() in ez
+        exec(
+            urllib.request.urlopen('https://bootstrap.pypa.io/ez_setup.py'
+                             ).read(),
+            ez,
+            ez)
         ez['use_setuptools'](to_dir=tmpeggs, download_delay=0)
 
     if to_reload:
