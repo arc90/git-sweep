@@ -6,7 +6,7 @@ from unittest import TestCase
 from uuid import uuid4 as uuid
 from shutil import rmtree
 from shlex import split
-from contextlib import contextmanager, nested
+from contextlib import contextmanager
 from textwrap import dedent
 
 from mock import patch
@@ -245,11 +245,9 @@ class CommandTestCase(GitSweepTestCase, InspectorTestCase, DeleterTestCase):
 
         self.cli.args = args[1:]
 
-        patches = (
-            patch.object(sys, 'stdout'),
-            patch.object(sys, 'stderr'))
-
-        with nested(*patches):
+        with (
+                patch.object(sys, 'stdout'),
+                patch.object(sys, 'stderr')):
             stdout = sys.stdout
             stderr = sys.stderr
             try:
