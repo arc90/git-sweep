@@ -26,7 +26,6 @@ from optparse import OptionParser
 from six.moves import reload_module, urllib
 
 
-
 tmpeggs = tempfile.mkdtemp()
 
 is_jython = sys.platform.startswith('java')
