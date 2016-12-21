@@ -32,7 +32,7 @@ parser = OptionParser()
 parser.add_option("-v", "--version", dest="version",
                           help="use a specific zc.buildout version")
 parser.add_option("-d", "--distribute",
-                   action="store_true", dest="distribute", default=True,
+                   action="store_true", dest="distribute", default=False,
                    help="Use Disribute rather than Setuptools.")
 
 options, args = parser.parse_args()
