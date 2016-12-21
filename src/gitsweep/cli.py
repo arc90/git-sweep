@@ -4,6 +4,7 @@ from argparse import ArgumentParser
 from textwrap import dedent
 
 from git import Repo, InvalidGitRepositoryError
+from six.moves import input
 
 from gitsweep.inspector import Inspector
 from gitsweep.deleter import Deleter
@@ -142,7 +143,7 @@ class CommandLine(object):
 
             if not args.force:
                 sys.stdout.write('\nDelete these branches? (y/n) ')
-                answer = raw_input()
+                answer = input()
             if args.force or answer.lower().startswith('y'):
                 sys.stdout.write('\n')
                 for ref in ok_to_delete:

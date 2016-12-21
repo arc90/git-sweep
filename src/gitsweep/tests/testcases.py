@@ -6,7 +6,7 @@ from unittest import TestCase
 from uuid import uuid4 as uuid
 from shutil import rmtree
 from shlex import split
-from contextlib import contextmanager, nested
+from contextlib import contextmanager
 from textwrap import dedent
 
 from mock import patch
@@ -241,23 +241,20 @@ class CommandTestCase(GitSweepTestCase, InspectorTestCase, DeleterTestCase):
         """
         Runs the command with the given args.
         """
+        exit_code = None
         args = split(command)
 
         self.cli.args = args[1:]
 
-        patches = (
-            patch.object(sys, 'stdout'),
-            patch.object(sys, 'stderr'))
-
-        with nested(*patches):
+        with patch.object(sys, 'stdout'), patch.object(sys, 'stderr'):
             stdout = sys.stdout
             stderr = sys.stderr
             try:
                 self.cli.run()
             except SystemExit as se:
-                pass
+                exit_code = se.code
 
         stdout = ''.join([i[0][0] for i in stdout.write.call_args_list])
         stderr = ''.join([i[0][0] for i in stderr.write.call_args_list])
 
-        return (se.code, stdout, stderr)
+        return (exit_code, stdout, stderr)
