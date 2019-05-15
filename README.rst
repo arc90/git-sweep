@@ -164,7 +164,7 @@ You can also clean up local branches by using simple hack:
 Development
 -----------
 
-git-sweep uses `git-flow`_ for development and release cylces. If you want to
+git-sweep uses `git-flow`_ for development and release cycles. If you want to
 hack on this with us, fork the project and put a pull request into the
 ``develop`` branch when you get done.
 
