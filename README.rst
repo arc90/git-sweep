@@ -31,6 +31,12 @@ To install it run:
 
     pip install git-sweep || easy_install git-sweep
 
+To uninstall it run:
+
+::
+
+    pip uninstall git-sweep
+
 Try it for yourself (safely)
 ----------------------------
 
