@@ -1,3 +1,7 @@
+from collections import namedtuple
+
+from git import GitCommandError
+
 from .base import BaseOperation
 
 
@@ -16,7 +20,12 @@ class Deleter(BaseOperation):
         origin = self._origin
 
         pushes = []
+        errors = []
         for ref in refs:
-            pushes.append(origin.push(':{0}'.format(ref.remote_head)))
+            try:
+                pushes.append(origin.push(':{0}'.format(ref.remote_head)))
+            except GitCommandError:
+                errors.append(ref.remote_head)
 
-        return pushes
+        RemoveResults = namedtuple('RemoveResults', 'pushes errors')
+        return RemoveResults(pushes, errors)

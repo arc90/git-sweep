@@ -147,8 +147,11 @@ class CommandLine(object):
                 sys.stdout.write('\n')
                 for ref in ok_to_delete:
                     sys.stdout.write('  deleting {0}'.format(ref.remote_head))
-                    deleter.remove_remote_refs([ref])
-                    sys.stdout.write(' (done)\n')
+                    _, errors = deleter.remove_remote_refs([ref])
+                    if errors:
+                        sys.stdout.write(' (failed)\n')
+                    else:
+                        sys.stdout.write(' (done)\n')
 
                 sys.stdout.write('\nAll done!\n')
                 sys.stdout.write('\nTell everyone to run `git fetch --prune` '

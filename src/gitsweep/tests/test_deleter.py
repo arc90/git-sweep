@@ -34,7 +34,7 @@ class TestDeleter(GitSweepTestCase, InspectorTestCase, DeleterTestCase):
         self.assertEqual(7, len(before))
 
         # Delete from the remote through the clone
-        pushes = self.deleter.remove_remote_refs(
+        pushes, _ = self.deleter.remove_remote_refs(
             self.merged_refs(refobjs=True))
 
         # Make sure it removed the expected number
@@ -66,7 +66,7 @@ class TestDeleter(GitSweepTestCase, InspectorTestCase, DeleterTestCase):
         self.assertEqual(6, len(before))
 
         # Delete through the clone which pushes to this remote
-        pushes = self.deleter.remove_remote_refs(
+        pushes, _ = self.deleter.remove_remote_refs(
             self.merged_refs(refobjs=True))
 
         # Make sure it removed the expected number
