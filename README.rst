@@ -1,48 +1,47 @@
+=========
 git-sweep
 =========
 
-A command-line tool that helps you clean up Git branches that have been merged
-into master.
-
-One of the best features of Git is cheap branches. There are existing branching
-models like `GitHub Flow`_ and Vincent Driessen's `git-flow`_ that describe
-methods for using this feature.
-
-The problem
+📚 Overview
 -----------
 
-Your ``master`` branch is typically where all your code lands. All features
-branches are meant to be short-lived and merged into ``master`` once they are
-completed.
+Feature branches are meant to be short-lived and merged into ``master`` once they are completed. However, after merging users often forget to delete these branches, and over time, forgotten branches can build up and create **a long and messy list of branches that are no longer needed**.
 
-As time marches on, you can build up **a long list of branches that are no
-longer needed**. They've been merged into ``master``, what do we do with them
-now?
+``git-sweep`` is a command-line tool that helps you clean up and **safely remove remote branches that have been merged into** ``master``.
 
-The answer
-----------
+For more information on Git branches, models such as `GitHub Flow`_ and Vincent Driessen's `git-flow`_, describe methods for using them.
 
-Using ``git-sweep`` you can **safely remove remote branches that have been
-merged into master**.
+.. contents:: **Table of Contents**
 
-To install it run:
+🔗 Dependencies
+------------
+
+* Git >= 1.7
+* Python >= 2.6
+
+🔧 Installation
+------------
+
+To install ``git-sweep``, ensure Python has been installed, then open the command-line and run the following prompt:
 
 ::
 
     pip install git-sweep || easy_install git-sweep
 
-Try it for yourself (safely)
-----------------------------
 
-To see a list of branches that git-sweep detects are merged into your master branch:
+🚀 Getting Started
+-------------------
 
-You need to have your Git repository as your current working directory.
+To use ``git-sweep``, first change the current working directory to the Git repository that will be cleaned:
 
 ::
 
     $ cd myrepo
 
-The ``preview`` command doesn't make any changes to your repo.
+Preview Command
+~~~~~~~~~~~~~~~
+
+The ``preview`` command allows you to preview what ``git-sweep`` would delete with the ``cleanup`` command. It tells ``git-sweep`` to detect all branches merged into the master branch and print them as a list. It does not alter the repository:
 
 ::
 
@@ -58,8 +57,10 @@ The ``preview`` command doesn't make any changes to your repo.
 
     To delete them, run again with `git-sweep cleanup`
 
-If you are happy with the list, you can run the command that deletes these
-branches from the remote, ``cleanup``:
+Cleanup Command
+~~~~~~~~~~~~~~~
+
+The ``cleanup`` command will tell ``git-sweep`` to delete all remote branches merged with ``master``. Before deleting, it will print the branches it will delete and ask for your confirmation. Upon approval ``git-sweep`` will delete the branches from the remote repository:
 
 ::
 
@@ -87,25 +88,13 @@ branches from the remote, ``cleanup``:
 
 *Note: this can take a little time, it's talking over the tubes to the remote.*
 
-You can also give it a different name for your remote and master branches.
+⚙️ Options
+-------
 
-::
+Skipping Branches
+~~~~~~~~~~~~~~~~~
 
-    $ git-sweep preview --master=develop --origin=github
-    ...
-
-Tell it to skip the ``git fetch`` that it does by default.
-
-::
-
-    $ git-sweep preview --nofetch
-    These branches have been merged into master:
-
-      branch1
-
-    To delete them, run again with `git-sweep cleanup --nofetch`
-
-Make it skip certain branches.
+The ``--skip`` option allows you to skip specified branches when using the ``preview`` or ``cleanup`` commands.
 
 ::
 
@@ -119,15 +108,41 @@ Make it skip certain branches.
 
     To delete them, run again with `git-sweep cleanup --skip=develop`
 
-Once git-sweep finds the branches, you'll be asked to confirm that you wish to
-delete them.
+Deleting Local Branches
+~~~~~~~~~~~~~~~~~~~~~~~
+
+To delete local branches, use the ``--origin=local`` option:
+
+:: 
+
+    $ cd myrepo
+    $ git remote add local $(pwd)
+    $ git-sweep cleanup --origin=local
+
+Skipping Git Fetch
+~~~~~~~~~~~~~~~~~~
+
+By default, ``git-sweep`` will first fetch from the remote repository when using ``preview`` or ``cleanup``. You can skip this step by using the ``--nofetch`` option:
+
+::
+
+    $ git-sweep preview --nofetch
+    These branches have been merged into master:
+
+      branch1
+
+    To delete them, run again with `git-sweep cleanup --nofetch`
+
+Forced Delete
+~~~~~~~~~~~~~
+
+By default, before ``git-sweep`` begins deleting branches, it will ask for your confirmation:
 
 ::
 
     Delete these branches? (y/n)
 
-You can use the ``--force`` option to bypass this and start deleting
-immediately.
+You can use the ``--force`` option to bypass this and start deleting immediately.
 
 ::
 
@@ -148,27 +163,22 @@ immediately.
     Tell everyone to run `git fetch --prune` to sync with this remote.
     (you don't have to, yours is synced)
     
-    
-Deleting local branches
+Renaming Branches
+~~~~~~~~~~~~~~~~~
+
+Using the following options, you can give the remote and master branches different names.
+
+::
+
+    $ git-sweep preview --master=develop --origin=github
+    ...
+
+🛠️ Development
 -----------
 
-You can also clean up local branches by using simple hack:
+If you want to hack on this with us, fork the project and create a pull request in the ``develop`` branch when you are finished.
 
-:: 
-
-    $ cd myrepo
-    $ git remote add local $(pwd)
-    $ git-sweep cleanup --origin=local
-    
-
-Development
------------
-
-git-sweep uses `git-flow`_ for development and release cylces. If you want to
-hack on this with us, fork the project and put a pull request into the
-``develop`` branch when you get done.
-
-To run the tests, bootstrap Buildout and run this command:
+``git-sweep`` uses `git-flow`_ for development and release cycles. To run the tests, bootstrap Buildout and run this command:
 
 ::
 
@@ -180,22 +190,16 @@ To run the tests, bootstrap Buildout and run this command:
     ...
     $ ./bin/test
 
-We also use Tox_. It will run the tests for Python 2.6 and 2.7.
+We also use Tox_. Run the tests for Python 2.6 and 2.7 using the following command:
 
 ::
 
     $ ./bin/tox
 
-Requirements
-------------
-
-* Git >= 1.7
-* Python >= 2.6
-
-License
+📃 License
 -------
 
-Friendly neighborhood MIT license.
+* Just a friendly neighborhood MIT license.
 
 .. _GitHub Flow: http://scottchacon.com/2011/08/31/github-flow.html
 .. _git-flow: http://nvie.com/posts/a-successful-git-branching-model/
